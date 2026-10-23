@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import Scene from './components/3d/Scene.jsx'
+import Scene from './components/3d/Scene'
 
 // Layout principal : scène 3D + UI globale superposée
 // TODO : UI globale

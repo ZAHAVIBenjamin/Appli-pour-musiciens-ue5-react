@@ -3,7 +3,7 @@
 Application React où chaque face d'un cube 3D est un outil pour musicien :
 accordeur, tablatures, métronome, dictionnaire d'accords, carnet d'entraînement, réglages.
 
-**Stack** : Vite · React · React Three Fiber / drei · Zustand · Web Audio API · Vercel
+**Stack** : Vite · React · TypeScript · React Three Fiber / drei · Zustand · Web Audio API · Vercel
 
 ## Démarrer
 
@@ -17,12 +17,12 @@ npm run dev
 
 ```
 src/
-├── App.jsx                  Layout principal + UI globale
+├── App.tsx                  Layout principal + UI globale
 ├── components/
-│   ├── 3d/                  Scene.jsx, Cube.jsx, CubeControls.jsx
+│   ├── 3d/                  Scene.tsx, Cube.tsx, CubeControls.tsx
 │   └── tools/               Une face = un composant (FaceTuner, FaceTabs, ...)
-├── store/useAppStore.js     État global (Zustand)
-└── services/                audioEngine.js (Web Audio), tablatureApi.js (HTTP)
+├── store/useAppStore.ts     État global (Zustand)
+└── services/                audioEngine.ts (Web Audio), tablatureApi.ts (HTTP)
 ```
 
 ## Répartition des rôles
@@ -31,9 +31,9 @@ src/
 |---|---|
 | Scène 3D, cube, rotation (`components/3d`) | _à définir_ |
 | Store global (`store/`) | _à définir_ |
-| Accordeur + `audioEngine.js` | _à définir_ |
+| Accordeur + `audioEngine.ts` | _à définir_ |
 | Métronome | _à définir_ |
-| Tablatures + `tablatureApi.js` | _à définir_ |
+| Tablatures + `tablatureApi.ts` | _à définir_ |
 | Dictionnaire d'accords | _à définir_ |
 | Carnet d'entraînement | _à définir_ |
 | Réglages | _à définir_ |

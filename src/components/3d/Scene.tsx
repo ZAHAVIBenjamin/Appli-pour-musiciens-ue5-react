@@ -1,5 +1,5 @@
 import { OrbitControls } from '@react-three/drei'
-import Cube from './Cube.jsx'
+import Cube from './Cube'
 
 // Racine de la scène : caméra, lumières, contrôles, transitions entre faces
 // TODO : animations de transition
