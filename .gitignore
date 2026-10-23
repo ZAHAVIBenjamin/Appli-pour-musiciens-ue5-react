@@ -1,0 +1,15 @@
+node_modules
+dist
+.vercel
+
+# Secrets : ne jamais commiter le vrai .env (copier .env.example)
+.env
+.env.local
+.env.*.local
+
+*.log
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea
