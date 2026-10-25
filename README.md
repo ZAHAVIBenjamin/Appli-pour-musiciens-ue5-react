@@ -41,6 +41,10 @@ E = Benjamin · I = son collègue · E + I = en binôme
 | Réglages | I |
 | Déploiement Vercel | E + I |
 
+## Apprendre en codant
+
+Chaque évolution est expliquée puis validée par un quiz de 5 questions ; les fiches de révision sont dans `docs/apprentissage/`. Règles complètes dans `CLAUDE.md`.
+
 ## Workflow Git
 
 - `main` : version stable, déployée sur Vercel. On ne pousse pas directement dessus.
