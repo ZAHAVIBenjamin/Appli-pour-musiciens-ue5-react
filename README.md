@@ -27,17 +27,19 @@ src/
 
 ## Répartition des rôles
 
+E = Benjamin · I = son collègue · E + I = en binôme
+
 | Partie | Responsable |
 |---|---|
-| Scène 3D, cube, rotation (`components/3d`) | _à définir_ |
-| Store global (`store/`) | _à définir_ |
-| Accordeur + `audioEngine.ts` | _à définir_ |
-| Métronome | _à définir_ |
-| Tablatures + `tablatureApi.ts` | _à définir_ |
-| Dictionnaire d'accords | _à définir_ |
-| Carnet d'entraînement | _à définir_ |
-| Réglages | _à définir_ |
-| Déploiement Vercel | _à définir_ |
+| Scène 3D, cube, rotation (`components/3d`) | E + I |
+| Store global (`store/`) | I |
+| Accordeur + `audioEngine.ts` | E |
+| Métronome | I |
+| Tablatures + `tablatureApi.ts` | E |
+| Dictionnaire d'accords | E |
+| Carnet d'entraînement | I |
+| Réglages | I |
+| Déploiement Vercel | E + I |
 
 ## Workflow Git
 
