@@ -6,7 +6,7 @@ Personne ne doit avoir à répondre « c'est l'IA qui l'a écrit, je ne sais pas
 
 ## Binôme
 
-- **E** = Benjamin · **I** = son collègue · **E + I** = en binôme
+- **E** = Benjamin · **I** = Bilal · **E + I** = en binôme
 - Répartition des parties : voir le tableau du `README.md`. Ne pas coder dans la partie de l'autre
   sans le signaler.
 
@@ -43,5 +43,9 @@ npm run build      # tsc + build Vite (doit passer avant toute PR)
 
 ## Workflow Git
 
-Branche `feature/...` créée depuis `dev`, Pull Request vers `dev` relue par l'autre membre,
-puis `dev` → `main` quand c'est stable. Ne jamais pousser directement sur `main`.
+Branche `feature/...` créée depuis `dev`, puis Pull Request vers `dev`.
+
+Les deux membres ne sont pas disponibles en même temps (l'un avance pendant que l'autre travaille) :
+**relecture après coup**. L'auteur merge lui-même sa PR dans `dev` pour ne pas bloquer ; l'autre la
+relit ensuite (code + fiche d'apprentissage + quiz) et commente ; les corrections partent dans une PR
+suivante. `dev` → `main` uniquement quand les deux ont validé. Ne jamais pousser directement sur `main`.
