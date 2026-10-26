@@ -3,3 +3,18 @@ html, body, #root, .app {
   height: 100%;
   background: #111;
 }
+
+/* La barre de boutons flotte par-dessus la scène 3D, en haut de l'écran */
+.app {
+  position: relative;
+}
+
+.face-nav {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
