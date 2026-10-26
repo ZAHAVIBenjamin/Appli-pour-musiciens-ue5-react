@@ -27,7 +27,7 @@ src/
 
 ## Répartition des rôles
 
-E = Benjamin · I = son collègue · E + I = en binôme
+E = Benjamin · I = Bilal · E + I = en binôme
 
 | Partie | Responsable |
 |---|---|
@@ -50,8 +50,8 @@ Chaque évolution est expliquée puis validée par un quiz de 5 questions ; les 
 - `main` : version stable, déployée sur Vercel. On ne pousse pas directement dessus.
 - `dev` : branche d'intégration.
 - Une branche par fonctionnalité, créée depuis `dev` : `feature/accordeur`, `feature/cube-rotation`, ...
-- Pull Request vers `dev`, relue par l'autre membre du binôme avant le merge.
-- `dev` → `main` quand une version est stable.
+- Pull Request vers `dev`. **Relecture après coup** : l'auteur merge lui-même sa PR dans `dev` pour ne pas bloquer, l'autre la relit ensuite (code + fiche + quiz) et commente si besoin ; les corrections partent dans une PR suivante.
+- `dev` → `main` uniquement quand **les deux** ont validé.
 
 ```bash
 git checkout dev && git pull

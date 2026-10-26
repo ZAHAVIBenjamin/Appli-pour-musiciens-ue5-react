@@ -1,4 +1,4 @@
-# 00 — Le squelette : comment l'appli démarre
+# EI-00 — Le squelette : comment l'appli démarre
 
 - **Date** : 25/10/2026
 - **Auteur** : E + I (fiche commune)

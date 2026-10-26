@@ -6,7 +6,7 @@ Personne ne doit avoir à répondre « c'est l'IA qui l'a écrit, je ne sais pas
 
 ## Binôme
 
-- **E** = Benjamin · **I** = son collègue · **E + I** = en binôme
+- **E** = Benjamin · **I** = Bilal · **E + I** = en binôme
 - Répartition des parties : voir le tableau du `README.md`. Ne pas coder dans la partie de l'autre
   sans le signaler.
 
@@ -25,7 +25,9 @@ Personne ne doit avoir à répondre « c'est l'IA qui l'a écrit, je ne sais pas
    - attendre les réponses de l'étudiant, puis corriger et réexpliquer ce qui n'est pas acquis ;
    - ne jamais donner les réponses avant qu'il ait essayé.
 4. **Fiche de révision.** Chaque évolution produit une fiche dans `docs/apprentissage/`
-   (modèle : `docs/apprentissage/_modele.md`) : explication + quiz + corrigé. Ces fiches servent à
+   (modèle : `docs/apprentissage/_modele.md`) : explication + quiz + corrigé.
+   Nom : `<préfixe>-<NN>-<sujet>.md`, préfixe `E` (Benjamin), `I` (Bilal) ou `EI` (partie commune),
+   numérotation propre à chaque préfixe (ex. `E-01-audio-clic.md`, `I-01-store-face-active.md`). Ces fiches servent à
    préparer la soutenance.
 5. **Pas validé tant que pas compris.** Une évolution n'est terminée (commit, PR) qu'une fois le
    quiz réussi.
@@ -43,5 +45,9 @@ npm run build      # tsc + build Vite (doit passer avant toute PR)
 
 ## Workflow Git
 
-Branche `feature/...` créée depuis `dev`, Pull Request vers `dev` relue par l'autre membre,
-puis `dev` → `main` quand c'est stable. Ne jamais pousser directement sur `main`.
+Branche `feature/...` créée depuis `dev`, puis Pull Request vers `dev`.
+
+Les deux membres ne sont pas disponibles en même temps (l'un avance pendant que l'autre travaille) :
+**relecture après coup**. L'auteur merge lui-même sa PR dans `dev` pour ne pas bloquer ; l'autre la
+relit ensuite (code + fiche d'apprentissage + quiz) et commente ; les corrections partent dans une PR
+suivante. `dev` → `main` uniquement quand les deux ont validé. Ne jamais pousser directement sur `main`.
