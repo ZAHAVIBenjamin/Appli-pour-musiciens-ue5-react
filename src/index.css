@@ -28,3 +28,46 @@ html, body, #root, .app {
   text-align: center;
   color: #fff;
 }
+
+/* Accordeur : nom de la note en grand, jauge avec un repère central et une aiguille */
+.tuner-note {
+  font-size: 64px;
+  margin: 8px 0;
+}
+
+.tuner-gauge {
+  position: relative; /* l'aiguille se place par rapport à la jauge */
+  width: 300px;
+  height: 40px;
+  margin: 0 auto;
+  border-bottom: 2px solid #555;
+}
+
+/* Repère central (0 cent) */
+.tuner-gauge::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #555;
+}
+
+.tuner-needle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  margin-left: -2px; /* centre l'aiguille sur sa position */
+  background: #e33;
+  transition: left 0.1s; /* glisse au lieu de sauter */
+}
+
+.tuner-needle.in-tune {
+  background: #3c3;
+}
+
+.tuner-error {
+  color: #f66;
+}
