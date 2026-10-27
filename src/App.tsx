@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import Scene from './components/3d/Scene'
 import FaceNav from './components/ui/FaceNav'
+import ToolPanel from './components/ui/ToolPanel'
 
 // Layout principal : scène 3D + UI globale superposée
 // TODO : UI globale
@@ -11,6 +12,7 @@ export default function App() {
         <Scene />
       </Canvas>
       <FaceNav />
+      <ToolPanel />
     </div>
   )
 }

@@ -18,3 +18,13 @@ html, body, #root, .app {
   justify-content: center;
   gap: 8px;
 }
+
+/* Le panneau de l'outil actif flotte sous la barre de boutons */
+.tool-panel {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #fff;
+}
