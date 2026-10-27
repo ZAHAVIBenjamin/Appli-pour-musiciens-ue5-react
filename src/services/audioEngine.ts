@@ -77,7 +77,9 @@ export async function startMicrophone(): Promise<AnalyserNode> {
   // Chaîne audio : micro → analyseur (et PAS vers les haut-parleurs, sinon larsen)
   micSource = ctx.createMediaStreamSource(micStream)
   analyser = ctx.createAnalyser()
-  analyser.fftSize = 2048 // nombre d'échantillons lus à chaque mesure
+  // Nombre d'échantillons lus à chaque mesure (~0,085 s de son).
+  // 4096 plutôt que 2048 : assez de périodes de la corde la plus grave pour mesurer juste.
+  analyser.fftSize = 4096
   micSource.connect(analyser)
 
   return analyser
@@ -92,15 +94,97 @@ export function stopMicrophone(): void {
   analyser = null
 }
 
-// Volume du son capté à cet instant, entre 0 (silence) et environ 1 (très fort).
-// Calcul RMS (racine de la moyenne des carrés) sur les derniers échantillons.
-export function getVolume(analyserNode: AnalyserNode): number {
+// Lit les derniers échantillons captés par l'analyseur (valeurs entre -1 et +1).
+function readSamples(analyserNode: AnalyserNode): Float32Array {
   const samples = new Float32Array(analyserNode.fftSize)
   analyserNode.getFloatTimeDomainData(samples)
+  return samples
+}
 
+// Calcul RMS (racine de la moyenne des carrés) : le volume d'une série d'échantillons.
+function rms(samples: Float32Array): number {
   let sum = 0
   for (const sample of samples) {
     sum += sample * sample
   }
   return Math.sqrt(sum / samples.length)
+}
+
+// Volume du son capté à cet instant, entre 0 (silence) et environ 1 (très fort).
+export function getVolume(analyserNode: AnalyserNode): number {
+  return rms(readSamples(analyserNode))
+}
+
+// ---------------------------------------------------------------------------
+// Détection de hauteur (pour l'accordeur)
+// ---------------------------------------------------------------------------
+
+const MIN_VOLUME = 0.01 // en dessous : silence, on ne cherche pas de note
+const MIN_FREQUENCY = 60 // Hz : un peu sous la corde la plus grave de la guitare (mi, 82 Hz)
+
+// Renvoie la fréquence fondamentale du son capté (en Hz), ou null s'il n'y a pas de note claire.
+// Méthode : l'autocorrélation (on cherche au bout de combien d'échantillons l'onde se répète).
+export function detectPitch(analyserNode: AnalyserNode): number | null {
+  const samples = readSamples(analyserNode)
+
+  // 0. Trop faible : pas la peine de chercher
+  if (rms(samples) < MIN_VOLUME) {
+    return null
+  }
+
+  const sampleRate = analyserNode.context.sampleRate // échantillons par seconde (souvent 48 000)
+  const maxLag = Math.floor(sampleRate / MIN_FREQUENCY) // plus grand décalage testé
+
+  // 1. Autocorrélation : pour chaque décalage (lag), on compare l'onde avec elle-même décalée.
+  //    Résultat élevé = l'onde ressemble à sa copie décalée = elle se répète tous les « lag ».
+  const correlations = new Float32Array(maxLag + 2)
+  for (let lag = 0; lag <= maxLag + 1; lag++) {
+    let sum = 0
+    const count = samples.length - lag
+    for (let i = 0; i < count; i++) {
+      sum += samples[i] * samples[i + lag]
+    }
+    correlations[lag] = sum / count // moyenne : comparable quel que soit le décalage
+  }
+
+  // 2. Au début (petits décalages), l'onde ressemble forcément à elle-même :
+  //    on avance jusqu'à ce que la ressemblance devienne négative (l'onde est « à l'envers »).
+  let start = 0
+  while (start < maxLag && correlations[start] > 0) {
+    start++
+  }
+
+  // 3. On cherche ensuite la plus forte ressemblance : c'est là que l'onde se répète.
+  let bestValue = 0
+  for (let lag = start; lag <= maxLag; lag++) {
+    if (correlations[lag] > bestValue) {
+      bestValue = correlations[lag]
+    }
+  }
+  if (bestValue === 0) {
+    return null // aucune répétition trouvée : bruit, pas une note
+  }
+
+  // 4. Piège de l'octave : l'onde se répète aussi à 2×, 3× la période, avec presque la même
+  //    ressemblance. On prend donc le PREMIER pic qui atteint 90 % du meilleur, puis on monte
+  //    jusqu'à son sommet.
+  let bestLag = start
+  while (correlations[bestLag] < 0.9 * bestValue) {
+    bestLag++
+  }
+  while (bestLag < maxLag && correlations[bestLag + 1] > correlations[bestLag]) {
+    bestLag++
+  }
+
+  // 5. Affiner : le vrai sommet tombe souvent ENTRE deux décalages entiers (ex. 582,4).
+  //    On fait passer une parabole par le sommet et ses deux voisins, et on prend son point le
+  //    plus haut : c'est l'interpolation parabolique. shift est compris entre -0,5 et +0,5.
+  const left = correlations[bestLag - 1]
+  const center = correlations[bestLag]
+  const right = correlations[bestLag + 1]
+  const curvature = left - 2 * center + right
+  const shift = curvature === 0 ? 0 : (left - right) / (2 * curvature)
+
+  // 6. Période en échantillons → fréquence en Hz
+  return sampleRate / (bestLag + shift)
 }
