@@ -52,6 +52,22 @@ Avec proxy :  page ───> localhost/api/songsterr ───> songsterr.com/a
 Le proxy ne valide rien et n'ajoute aucun en-tête : il fait en sorte que la page ne parle qu'à son
 propre site, donc la règle CORS ne s'applique plus.
 
+**Le proxy n'obtient aucune autorisation : il n'en a pas besoin.** L'en-tête ACAO n'est lu que par
+les **navigateurs**. Songsterr ne vérifie rien : il répond à tout le monde pareil, sans ACAO (ni `*`
+ni autre). Quand c'est Chrome qui reçoit pour le code d'une autre origine, il cherche l'ACAO et
+garde la réponse ; quand c'est Vite (pas un navigateur), il prend la réponse et la renvoie à la
+page, qui la reçoit de sa propre origine. Le proxy n'est pas un espion : il fait exactement ce que
+fait `curl`. `changeOrigin` écrit seulement le bon destinataire sur l'enveloppe, ce n'est pas un
+déguisement.
+
+**CORS protège l'utilisateur, pas le serveur** : il empêche un site piégé de lire des données
+privées avec tes cookies. Ici les données sont publiques et le proxy n'a pas tes cookies. Pour
+empêcher d'autres applis d'utiliser ses données, Songsterr devrait utiliser autre chose (clé d'API,
+limite de requêtes, blocage d'adresses) — d'où le risque assumé que cette porte se ferme un jour.
+
+**Origine** = protocole + domaine + port : `localhost:5173` et `localhost:3000` sont deux origines
+différentes (le CORS s'applique).
+
 **vite.config.ts** — en développement :
 
 ```ts

@@ -18,8 +18,11 @@ interface SongsterrSong {
   tracks: SongsterrTrack[]
 }
 
-// Ce que l'appli utilise : un morceau, avec seulement ses pistes de guitare
-export interface GuitarTrack {
+// Ce que l'appli utilise : un morceau, avec seulement ses pistes d'instruments à cordes
+export type Instrument = 'guitar' | 'bass' | 'ukulele'
+
+export interface StringTrack {
+  instrument: Instrument
   name: string
   tuning: number[]
 }
@@ -29,7 +32,33 @@ export interface Song {
   artist: string
   title: string
   url: string // page du morceau sur Songsterr, pour lire la tablature
-  guitarTracks: GuitarTrack[]
+  tracks: StringTrack[]
+}
+
+// Range un nom d'instrument Songsterr dans une de nos catégories (null : on ne le garde pas)
+function instrumentOf(songsterrInstrument: string): Instrument | null {
+  if (songsterrInstrument.includes('Guitar')) {
+    return 'guitar'
+  }
+  if (songsterrInstrument.includes('Bass')) {
+    return 'bass'
+  }
+  if (songsterrInstrument.includes('Ukulele')) {
+    return 'ukulele'
+  }
+  return null // batterie, voix, piano...
+}
+
+// Ne garde que les pistes d'instruments à cordes, en leur donnant leur catégorie
+function toStringTracks(tracks: SongsterrTrack[]): StringTrack[] {
+  const result: StringTrack[] = []
+  for (const track of tracks) {
+    const instrument = instrumentOf(track.instrument)
+    if (instrument !== null) {
+      result.push({ instrument, name: track.name, tuning: track.tuning })
+    }
+  }
+  return result
 }
 
 // Cherche des morceaux par artiste ou par titre (10 résultats au maximum)
@@ -46,14 +75,12 @@ export async function searchSongs(query: string): Promise<Song[]> {
 
   const songs: SongsterrSong[] = await response.json()
 
-  // On transforme chaque morceau Songsterr en Song : on garde les guitares, on ajoute l'adresse
+  // On transforme chaque morceau Songsterr en Song : on trie les pistes, on ajoute l'adresse
   return songs.map((song) => ({
     id: song.songId,
     artist: song.artist,
     title: song.title,
     url: `https://www.songsterr.com/a/wa/song?id=${song.songId}`,
-    guitarTracks: song.tracks
-      .filter((track) => track.instrument.includes('Guitar'))
-      .map((track) => ({ name: track.name, tuning: track.tuning })),
+    tracks: toStringTracks(song.tracks),
   }))
 }
