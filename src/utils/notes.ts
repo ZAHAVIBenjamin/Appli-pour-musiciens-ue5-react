@@ -14,6 +14,11 @@ export interface Note {
   frequency: number // fréquence juste de cette note, en Hz
 }
 
+// Nom de la note d'un numéro MIDI, sans l'octave (ex. 40 → 'Mi')
+export function midiToName(midi: number): string {
+  return NOTE_NAMES[midi % 12]
+}
+
 // Trouve la note la plus proche d'une fréquence, et de combien on en est éloigné
 export function frequencyToNote(frequency: number): Note {
   // 1. Nombre de demi-tons entre le La4 et cette fréquence (décimal : 2,3 = « entre deux notes »)
@@ -27,7 +32,7 @@ export function frequencyToNote(frequency: number): Note {
   const cents = Math.round((exactMidi - midi) * 100)
 
   return {
-    name: NOTE_NAMES[midi % 12],
+    name: midiToName(midi),
     octave: Math.floor(midi / 12) - 1,
     cents,
     frequency: A4_FREQUENCY * 2 ** ((midi - A4_MIDI) / 12),

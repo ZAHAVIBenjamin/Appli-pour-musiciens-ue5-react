@@ -71,3 +71,35 @@ html, body, #root, .app {
 .tuner-error {
   color: #f66;
 }
+
+/* Tablatures : liste de résultats sur fond sombre, qui défile si elle est trop longue */
+.tabs-results {
+  list-style: none;
+  padding: 0 16px;
+  margin: 16px auto;
+  max-width: 600px;
+  max-height: 60vh;
+  overflow-y: auto;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.tabs-results li {
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+}
+
+.tabs-results a {
+  color: #8cf;
+  font-weight: bold;
+}
+
+.tabs-track {
+  margin: 4px 0 0 16px;
+  font-size: 14px;
+  color: #bbb;
+}
+
+.tabs-error {
+  color: #f66;
+}
