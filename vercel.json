@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/songsterr/:path*",
+      "destination": "https://www.songsterr.com/api/:path*"
+    }
+  ]
+}
