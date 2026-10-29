@@ -1,4 +1,7 @@
-html, body, #root, .app {
+html,
+body,
+#root,
+.app {
   margin: 0;
   height: 100%;
   background: #111;
@@ -102,4 +105,19 @@ html, body, #root, .app {
 
 .tabs-error {
   color: #f66;
+}
+
+/* Dictionnaire d'accords : boutons sur plusieurs lignes, diagramme à une largeur fixe */
+.chord-list {
+  display: flex;
+  flex-wrap: wrap; /* les boutons passent à la ligne s'il n'y a plus de place */
+  justify-content: center;
+  gap: 4px;
+  max-width: 420px;
+  margin: 0 auto 12px;
+}
+
+.chord-diagram {
+  width: 300px;
+  color: #fff; /* currentColor dans le SVG = cette couleur */
 }
