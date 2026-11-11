@@ -1,32 +1,16 @@
-import { useAppStore, type FaceId } from '../../store/useAppStore'
+import { NavLink } from 'react-router'
+import { FACES } from '../../data/faces'
 
-// Barre de navigation : un bouton par face du cube.
-// Elle lit la face active dans le store et la change au clic.
-
-// Texte affiché sur chaque bouton
-const FACES: { id: FaceId; label: string }[] = [
-  { id: 'tuner', label: 'Accordeur' },
-  { id: 'tabs', label: 'Tablatures' },
-  { id: 'metronome', label: 'Métronome' },
-  { id: 'chords', label: 'Accords' },
-  { id: 'notebook', label: 'Carnet' },
-  { id: 'settings', label: 'Réglages' },
-]
-
+// Barre de navigation : un lien par face du cube.
+// NavLink change l'adresse sans recharger la page, et ajoute la classe « active »
+// au lien de la face affichée (voir index.css).
 export default function FaceNav() {
-  const activeFace = useAppStore((state) => state.activeFace)
-  const setActiveFace = useAppStore((state) => state.setActiveFace)
-
   return (
     <nav className="face-nav">
       {FACES.map((face) => (
-        <button
-          key={face.id}
-          onClick={() => setActiveFace(face.id)}
-          disabled={face.id === activeFace}
-        >
+        <NavLink key={face.id} to={face.path}>
           {face.label}
-        </button>
+        </NavLink>
       ))}
     </nav>
   )

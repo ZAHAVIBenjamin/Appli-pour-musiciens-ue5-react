@@ -1,5 +1,8 @@
 # I-01 — Le store Zustand : la face active du cube
 
+> ⚠️ **Mis à jour le 09/11/2026 (fiche EI-01)** : le store Zustand a été **supprimé**. La face affichée est maintenant l'adresse de la page (React Router).
+> Cette fiche reste valable pour comprendre l'historique ; la version actuelle est expliquée dans `EI-01-routing-faces.md`.
+
 - **Date** : 26/10/2026
 - **Auteur** : I
 - **Fichiers touchés** : `src/store/useAppStore.ts`

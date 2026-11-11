@@ -22,6 +22,22 @@ body,
   gap: 8px;
 }
 
+/* Les liens de la barre ont l'allure de boutons ; NavLink ajoute « active » à la face affichée */
+.face-nav a {
+  padding: 2px 8px;
+  border: 1px solid #888;
+  border-radius: 3px;
+  background: #fff;
+  color: #111;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.face-nav a.active {
+  background: #555;
+  color: #aaa;
+}
+
 /* Le panneau de l'outil actif flotte sous la barre de boutons */
 .tool-panel {
   position: absolute;
@@ -120,4 +136,9 @@ body,
 .chord-diagram {
   width: 300px;
   color: #fff; /* currentColor dans le SVG = cette couleur */
+}
+
+/* Page 404 : le lien vers l'accordeur reste lisible sur le fond sombre */
+.tool-panel a {
+  color: #8cf;
 }
