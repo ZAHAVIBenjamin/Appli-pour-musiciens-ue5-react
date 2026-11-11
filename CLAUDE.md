@@ -35,7 +35,11 @@ Personne ne doit avoir à répondre « c'est l'IA qui l'a écrit, je ne sais pas
 
 ## Stack et commandes
 
-Vite · React · TypeScript (strict) · React Three Fiber / drei · Zustand · Web Audio API · Vercel
+Vite · React · TypeScript (strict) · React Router · React Three Fiber / drei · Web Audio API · Vitest · Vercel
+
+**Référence : le cours React (chapitres 1 à 7).** On choisit d'abord les outils du cours (props, state
+remonté, React Router, useEffect, fetch...). Tout ce qui en sort doit être justifié dans le `README.md`
+(section « Choix techniques et cours »).
 
 ```bash
 npm run dev        # serveur de développement

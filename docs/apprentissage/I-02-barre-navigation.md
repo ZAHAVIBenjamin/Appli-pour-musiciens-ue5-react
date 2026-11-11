@@ -1,5 +1,8 @@
 # I-02 — Barre de navigation : changer de face avec le store
 
+> ⚠️ **Mis à jour le 09/11/2026 (fiche EI-01)** : les boutons qui appelaient `setActiveFace` sont devenus des **`NavLink`** (React Router), et la liste des faces est dans `src/data/faces.ts`.
+> Cette fiche reste valable pour comprendre l'historique ; la version actuelle est expliquée dans `EI-01-routing-faces.md`.
+
 - **Date** : 26/10/2026
 - **Auteur** : I
 - **Fichiers touchés** : `src/components/ui/FaceNav.tsx` (nouveau), `src/App.tsx`, `src/index.css`

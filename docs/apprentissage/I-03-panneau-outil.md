@@ -1,5 +1,8 @@
 # I-03 — Panneau de l'outil actif : afficher la face choisie
 
+> ⚠️ **Mis à jour le 09/11/2026 (fiche EI-01)** : `ToolPanel` ne choisit plus l'outil avec `TOOLS[activeFace]` : il contient un **`<Outlet />`** où le routeur affiche l'outil de l'adresse. Le contenu de `App` est passé dans `components/ui/Layout.tsx`.
+> Cette fiche reste valable pour comprendre l'historique ; la version actuelle est expliquée dans `EI-01-routing-faces.md`.
+
 - **Date** : 27/10/2026
 - **Auteur** : I
 - **Fichiers touchés** : `src/components/ui/ToolPanel.tsx` (nouveau), `src/App.tsx`, `src/index.css`,
