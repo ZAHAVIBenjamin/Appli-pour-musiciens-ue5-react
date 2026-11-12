@@ -256,6 +256,22 @@ Rattrapage :
 - `FaceNav` = la barre de liens, **pas** l'emplacement d'affichage (c'est `Outlet`).
 - **Deux mondes** (PC / Vercel) : qui répond quand on recharge une adresse.
 
+## Points à retravailler (I)
+
+Relecture faite par I le 12/11/2026 : quiz réussi après rattrapage (A, B, D reformulés).
+
+- **Répondre avec mes mots** : premières réponses 2, 3 et 5 trop proches du texte de l'explication.
+  À l'oral, savoir redire la chaîne `BrowserRouter` (lit) → `Routes` (choisit) → `Outlet` (affiche)
+  → route layout (garde le commun) sans support.
+- **Répondre à la question posée** : en 5, dire ce que voit l'utilisateur (404 de Vercel, React ne
+  démarre pas), pas seulement le rôle de la règle.
+- **Argument décisif face au prof** : `useContext` / `useReducer` ne sont **pas** dans les chapitres 1
+  à 7 ; le cours propose state remonté (ch. 4) ou React Router (ch. 3).
+- `<a href>` vs `NavLink` : le métronome s'arrête dans les deux cas (démontage, I-04) ; la vraie
+  différence est que `<a href>` redémarre **toute** l'appli (cube réinitialisé).
+- Pour mon métronome : si `isPlaying` doit un jour survivre au changement de face, la réponse
+  « cours » est de **remonter le state** dans `Layout`, plus un store.
+
 ## Questions possibles à l'oral
 
 - **Pourquoi avez-vous abandonné Zustand ?** Hors du cours et surdimensionné pour une seule
