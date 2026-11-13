@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
-import { playClick } from '../../services/audioEngine'
+import { getAudioContext, playClick } from '../../services/audioEngine'
 
 // Métronome : BPM et signature rythmique
-// TODO (prochaines étapes) : rythme précis, premier temps accentué
+// TODO (prochaine étape) : premier temps accentué
 
 // Limites du curseur de tempo
 const MIN_BPM = 40
 const MAX_BPM = 220
+
+const CHECK_EVERY_MS = 25
+const SCHEDULE_AHEAD_S = 0.1
 
 export default function FaceMetronome() {
   // true quand le métronome tourne
@@ -21,9 +24,16 @@ export default function FaceMetronome() {
       return
     }
 
-    const beatDuration = 60000 / bpm // durée d'un battement, en millisecondes
-    playClick() // premier clic tout de suite
-    const timerId = setInterval(() => playClick(), beatDuration)
+    const ctx = getAudioContext()
+    const beatDuration = 60 / bpm
+    let nextBeatTime = ctx.currentTime + 0.05
+
+    const timerId = setInterval(() => {
+      while (nextBeatTime < ctx.currentTime + SCHEDULE_AHEAD_S) {
+        playClick(false, nextBeatTime)
+        nextBeatTime += beatDuration
+      }
+    }, CHECK_EVERY_MS)
 
     // Nettoyage : appelé à l'arrêt, au changement de tempo, ou quand le composant disparaît
     return () => clearInterval(timerId)
