@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { getAudioContext, playClick } from '../../services/audioEngine'
 
 // Métronome : BPM et signature rythmique
-// TODO (prochaine étape) : choisir la signature rythmique
 
 // Limites du curseur de tempo
 const MIN_BPM = 40
@@ -10,13 +9,14 @@ const MAX_BPM = 220
 
 const CHECK_EVERY_MS = 25
 const SCHEDULE_AHEAD_S = 0.1
-const BEATS_PER_BAR = 4
+const BAR_CHOICES = [2, 3, 4]
 
 export default function FaceMetronome() {
   // true quand le métronome tourne
   const [isPlaying, setIsPlaying] = useState(false)
   // tempo choisi par l'utilisateur, en battements par minute
   const [bpm, setBpm] = useState(120)
+  const [beatsPerBar, setBeatsPerBar] = useState(4)
 
   // Tant que le métronome tourne, on joue un clic à chaque battement.
   // Relancé aussi quand le tempo change, pour prendre la nouvelle vitesse.
@@ -32,7 +32,7 @@ export default function FaceMetronome() {
 
     const timerId = setInterval(() => {
       while (nextBeatTime < ctx.currentTime + SCHEDULE_AHEAD_S) {
-        playClick(beatIndex % BEATS_PER_BAR === 0, nextBeatTime)
+        playClick(beatIndex % beatsPerBar === 0, nextBeatTime)
         nextBeatTime += beatDuration
         beatIndex++
       }
@@ -40,7 +40,7 @@ export default function FaceMetronome() {
 
     // Nettoyage : appelé à l'arrêt, au changement de tempo, ou quand le composant disparaît
     return () => clearInterval(timerId)
-  }, [isPlaying, bpm])
+  }, [isPlaying, bpm, beatsPerBar])
 
   return (
     <div>
@@ -54,6 +54,16 @@ export default function FaceMetronome() {
         onChange={(event) => setBpm(Number(event.target.value))}
       />
       <br />
+      <select
+        value={beatsPerBar}
+        onChange={(event) => setBeatsPerBar(Number(event.target.value))}
+      >
+        {BAR_CHOICES.map((beats) => (
+          <option key={beats} value={beats}>
+            {beats}/4
+          </option>
+        ))}
+      </select>
       <button onClick={() => setIsPlaying(!isPlaying)}>
         {isPlaying ? 'Arrêter' : 'Démarrer'}
       </button>
