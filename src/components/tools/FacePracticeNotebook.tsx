@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 
 // Carnet de notes / suivi des séances
 // Choix du binôme : sauvegarde dans le navigateur (localStorage), pas de back-end
@@ -10,10 +10,24 @@ type Session = {
   minutes: number
 }
 
+const STORAGE_KEY = 'carnet-seances'
+
+function loadSessions(): Session[] {
+  const saved = localStorage.getItem(STORAGE_KEY)
+  if (saved === null) {
+    return []
+  }
+  return JSON.parse(saved)
+}
+
 export default function FacePracticeNotebook() {
-  const [sessions, setSessions] = useState<Session[]>([])
+  const [sessions, setSessions] = useState<Session[]>(loadSessions)
   const [topic, setTopic] = useState('')
   const [minutes, setMinutes] = useState(15)
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions))
+  }, [sessions])
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()

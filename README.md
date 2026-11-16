@@ -58,6 +58,7 @@ Ce qui sort du cours, et pourquoi :
 | React Three Fiber / drei | Le sujet du projet : le cube 3D |
 | Web Audio API | API du navigateur pour le son (clic du métronome, micro de l'accordeur) |
 | Vitest | Tests automatiques (`npm test`) : vérifie le dictionnaire d'accords |
+| localStorage | API du navigateur : le carnet d'entraînement garde ses séances sans back-end (fiche I-10) |
 
 ## Apprendre en codant
 
