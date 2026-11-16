@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { getAudioContext, playClick } from '../../services/audioEngine'
 
 // Métronome : BPM et signature rythmique
-// TODO (prochaine étape) : premier temps accentué
+// TODO (prochaine étape) : choisir la signature rythmique
 
 // Limites du curseur de tempo
 const MIN_BPM = 40
@@ -10,6 +10,7 @@ const MAX_BPM = 220
 
 const CHECK_EVERY_MS = 25
 const SCHEDULE_AHEAD_S = 0.1
+const BEATS_PER_BAR = 4
 
 export default function FaceMetronome() {
   // true quand le métronome tourne
@@ -27,11 +28,13 @@ export default function FaceMetronome() {
     const ctx = getAudioContext()
     const beatDuration = 60 / bpm
     let nextBeatTime = ctx.currentTime + 0.05
+    let beatIndex = 0
 
     const timerId = setInterval(() => {
       while (nextBeatTime < ctx.currentTime + SCHEDULE_AHEAD_S) {
-        playClick(false, nextBeatTime)
+        playClick(beatIndex % BEATS_PER_BAR === 0, nextBeatTime)
         nextBeatTime += beatDuration
+        beatIndex++
       }
     }, CHECK_EVERY_MS)
 
