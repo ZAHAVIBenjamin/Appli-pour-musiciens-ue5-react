@@ -37,9 +37,12 @@ Personne ne doit avoir à répondre « c'est l'IA qui l'a écrit, je ne sais pas
 
 Vite · React · TypeScript (strict) · React Router · React Three Fiber / drei · Web Audio API · Vitest · Vercel
 
-**Référence : le cours React (chapitres 1 à 7).** On choisit d'abord les outils du cours (props, state
-remonté, React Router, useEffect, fetch...). Tout ce qui en sort doit être justifié dans le `README.md`
-(section « Choix techniques et cours »).
+**Référence : le cours React (chapitres 1 à 7, et 10).** On choisit d'abord les outils du cours (props,
+state remonté, React Router, useEffect, fetch, puis useReducer / useContext). Tout ce qui en sort doit
+être justifié dans le `README.md` (section « Choix techniques et cours »).
+Règles du chapitre 10 : un state reste **local** tant qu'un seul composant s'en sert ; essayer la
+composition (`children`) avant un context ; un context est lu via un hook maison (`useSettings()`…) ;
+un reducer reste **pur** (localStorage, fetch : dans un effet ou un handler, jamais dans le reducer).
 
 ```bash
 npm run dev        # serveur de développement
