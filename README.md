@@ -47,9 +47,18 @@ E = Benjamin · I = Bilal · E + I = en binôme
 
 ## Choix techniques et cours
 
-Le projet s'appuie sur les chapitres 1 à 7 du cours React (composants et props, routing, state,
-effets, data fetching, Rules of React). **La face affichée n'est pas un état global : c'est l'adresse
-de la page** (React Router, chapitre 3). Zustand, utilisé au début, a été retiré (fiche EI-01).
+Le projet s'appuie sur le cours React : chapitres 1 à 7 (composants et props, routing, state, effets,
+data fetching, Rules of React) et chapitre 10 (useReducer et useContext).
+
+- **La face affichée n'est pas un état global : c'est l'adresse de la page** (React Router,
+  chapitre 3). C'est une seule information, et l'URL la porte déjà : pas besoin de context.
+- **Context + useReducer (chapitre 10)** : réservés aux données **partagées par plusieurs faces**
+  et aux valeurs **liées entre elles** (piste : la face Réglages, lue par l'accordeur et les
+  tablatures). Règle du cours : un state reste local tant qu'un seul composant s'en sert.
+- **localStorage** : vu au chapitre 5 (synchronisation dans un `useEffect`) ; le carnet
+  d'entraînement garde ses séances sans back-end (fiche I-10).
+- Zustand, utilisé au début, a été retiré (fiche EI-01) : le cours le cite comme un outil
+  « au-delà » de Context + useReducer, inutile pour notre appli.
 
 Ce qui sort du cours, et pourquoi :
 
@@ -57,8 +66,7 @@ Ce qui sort du cours, et pourquoi :
 |---|---|
 | React Three Fiber / drei | Le sujet du projet : le cube 3D |
 | Web Audio API | API du navigateur pour le son (clic du métronome, micro de l'accordeur) |
-| Vitest | Tests automatiques (`npm test`) : vérifie le dictionnaire d'accords |
-| localStorage | API du navigateur : le carnet d'entraînement garde ses séances sans back-end (fiche I-10) |
+| Vitest | Tests automatiques (`npm test`) : vérifie le dictionnaire d'accords. Cité au chapitre 10 pour tester un reducer |
 
 ## Apprendre en codant
 
