@@ -45,6 +45,10 @@ export default function FacePracticeNotebook() {
     setTopic('')
   }
 
+  function handleDelete(id: number) {
+    setSessions(sessions.filter((session) => session.id !== id))
+  }
+
   return (
     <div>
       <h2>Carnet d'entraînement</h2>
@@ -70,7 +74,8 @@ export default function FacePracticeNotebook() {
         <ul>
           {sessions.map((session) => (
             <li key={session.id}>
-              {session.date} — {session.topic} ({session.minutes} min)
+              {session.date} — {session.topic} ({session.minutes} min){' '}
+              <button onClick={() => handleDelete(session.id)}>Supprimer</button>
             </li>
           ))}
         </ul>
