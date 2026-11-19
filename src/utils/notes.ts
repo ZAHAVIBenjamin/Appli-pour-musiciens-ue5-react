@@ -36,6 +36,19 @@ export function midiToName(midi: number): string {
 // (Mi2 La2 Ré3 Sol3 Si3 Mi4)
 export const STANDARD_TUNING = [40, 45, 50, 55, 59, 64]
 
+// Accordage standard de chaque instrument, en MIDI, de la corde grave à la corde aiguë.
+// Ukulélé : accordage « réentrant » (le Sol4 de la 1re corde est plus aigu que le Do4 suivant).
+export const TUNINGS = {
+  guitar: STANDARD_TUNING, // Mi2 La2 Ré3 Sol3 Si3 Mi4
+  bass: [28, 33, 38, 43], // Mi1 La1 Ré2 Sol2
+  ukulele: [67, 60, 64, 69], // Sol4 Do4 Mi4 La4
+}
+
+// Nom complet d'un numéro MIDI, avec l'octave (ex. 40 → 'Mi2')
+export function midiToFullName(midi: number): string {
+  return midiToName(midi) + (Math.floor(midi / 12) - 1)
+}
+
 // Note jouée par chaque corde d'une position d'accord (null si la corde n'est pas jouée).
 // Chaque case ajoute un demi-ton, donc +1 au numéro MIDI de la corde à vide.
 export function notesOfFrets(

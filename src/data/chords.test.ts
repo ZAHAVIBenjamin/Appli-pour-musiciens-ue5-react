@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { CHORDS } from './chords'
-import { NOTE_NAMES, midiToName, notesOfFrets } from '../utils/notes'
+import { CHORDS_BY_INSTRUMENT } from './chords'
+import { NOTE_NAMES, TUNINGS, midiToName, notesOfFrets } from '../utils/notes'
+import type { Instrument } from '../services/tablatureApi'
 
 // Tests du dictionnaire d'accords : une faute de frappe dans les données ferait échouer un test.
 // Lancer avec : npm test
@@ -18,11 +19,15 @@ function expectedNotes(chordName: string): string[] {
 }
 
 // --- Les tests ---
-describe("dictionnaire d'accords", () => {
-  for (const chord of CHORDS) {
+const INSTRUMENTS: Instrument[] = ['guitar', 'bass', 'ukulele']
+
+describe.each(INSTRUMENTS)("dictionnaire d'accords : %s", (instrument) => {
+  const tuning = TUNINGS[instrument]
+
+  for (const chord of CHORDS_BY_INSTRUMENT[instrument]) {
     it(`${chord.name} : une valeur par corde`, () => {
-      expect(chord.frets).toHaveLength(6)
-      expect(chord.fingers).toHaveLength(6)
+      expect(chord.frets).toHaveLength(tuning.length)
+      expect(chord.fingers).toHaveLength(tuning.length)
     })
 
     it(`${chord.name} : un doigt sur chaque case appuyée, aucun sinon`, () => {
@@ -33,7 +38,7 @@ describe("dictionnaire d'accords", () => {
     })
 
     it(`${chord.name} : ne joue que les notes de l'accord`, () => {
-      const played = notesOfFrets(chord.frets).filter((note) => note !== null)
+      const played = notesOfFrets(chord.frets, tuning).filter((note) => note !== null)
       // Set = ensemble sans doublons ni ordre : { Do, Mi, Sol } même si Do et Mi sont joués 2 fois
       expect(new Set(played)).toEqual(new Set(expectedNotes(chord.name)))
     })

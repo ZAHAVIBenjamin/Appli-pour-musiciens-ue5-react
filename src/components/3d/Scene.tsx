@@ -1,4 +1,3 @@
-import { OrbitControls } from '@react-three/drei'
 import Cube from './Cube'
 
 // Racine de la scène : caméra, lumières, contrôles, transitions entre faces
@@ -9,7 +8,6 @@ export default function Scene() {
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 5, 5]} />
       <Cube />
-      <OrbitControls />
     </>
   )
 }

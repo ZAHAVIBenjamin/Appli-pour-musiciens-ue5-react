@@ -38,14 +38,22 @@ body,
   color: #aaa;
 }
 
-/* Le panneau de l'outil actif flotte sous la barre de boutons */
+/* Le panneau de l'outil actif : un carré collé sur la face du cube (420 px = FACE_PIXELS dans Cube.tsx).
+   Si l'outil est plus long que la face, on fait défiler à l'intérieur. */
 .tool-panel {
-  position: absolute;
-  top: 64px;
-  left: 0;
-  right: 0;
+  box-sizing: border-box;
+  width: 420px;
+  height: 420px;
+  padding: 12px;
+  overflow-y: auto;
   text-align: center;
   color: #fff;
+  background: rgba(17, 17, 17, 0.85);
+  border-radius: 6px;
+}
+
+.tool-panel h2 {
+  margin-top: 0;
 }
 
 /* Accordeur : nom de la note en grand, jauge avec un repère central et une aiguille */
@@ -141,4 +149,33 @@ body,
 /* Page 404 : le lien vers l'accordeur reste lisible sur le fond sombre */
 .tool-panel a {
   color: #8cf;
+}
+
+/* Sur la face du cube, c'est le panneau qui défile : pas de seconde barre dans la liste des tablatures */
+.tool-panel .tabs-results {
+  max-height: none;
+  overflow-y: visible;
+}
+
+/* Accordeur : rappel des cordes à vide, la corde jouée est surlignée */
+.tuner-strings {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tuner-string {
+  padding: 2px 6px;
+  border: 1px solid #555;
+  border-radius: 3px;
+}
+
+.tuner-string.active {
+  background: #3c3;
+  color: #111;
+}
+
+/* Sur mobile, glisser le doigt sur la scène fait tourner le cube au lieu de faire défiler la page */
+.app canvas {
+  touch-action: none;
 }
