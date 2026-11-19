@@ -6,14 +6,18 @@ import {
   type Dispatch,
   type ReactNode,
 } from 'react'
+import type { Instrument } from '../services/tablatureApi'
 
 export type CubeMaterial = 'plastique' | 'bois' | 'metal'
 
 export type Settings = {
   cubeMaterial: CubeMaterial
+  instrument: Instrument
 }
 
-type SettingsAction = { type: 'setCubeMaterial'; material: CubeMaterial }
+type SettingsAction =
+  | { type: 'setCubeMaterial'; material: CubeMaterial }
+  | { type: 'setInstrument'; instrument: Instrument }
 
 type SettingsContextValue = {
   settings: Settings
@@ -21,12 +25,14 @@ type SettingsContextValue = {
 }
 
 const STORAGE_KEY = 'reglages-generaux'
-const DEFAULT_SETTINGS: Settings = { cubeMaterial: 'plastique' }
+const DEFAULT_SETTINGS: Settings = { cubeMaterial: 'plastique', instrument: 'guitar' }
 
 function settingsReducer(settings: Settings, action: SettingsAction): Settings {
   switch (action.type) {
     case 'setCubeMaterial':
       return { ...settings, cubeMaterial: action.material }
+    case 'setInstrument':
+      return { ...settings, instrument: action.instrument }
   }
 }
 
