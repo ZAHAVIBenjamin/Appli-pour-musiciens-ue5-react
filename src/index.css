@@ -18,8 +18,11 @@ body,
   left: 0;
   right: 0;
   display: flex;
+  flex-wrap: wrap; /* sur téléphone, les liens passent sur 2 lignes */
   justify-content: center;
   gap: 8px;
+  padding: 0 8px;
+  z-index: 1;
 }
 
 /* Les liens de la barre ont l'allure de boutons ; NavLink ajoute « active » à la face affichée */
