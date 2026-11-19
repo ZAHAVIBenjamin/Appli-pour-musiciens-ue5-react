@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { useSettings } from '../../context/SettingsContext'
 import { searchSongs, type Instrument, type Song } from '../../services/tablatureApi'
 import { midiToName } from '../../utils/notes'
 
@@ -20,7 +21,8 @@ function tuningToText(tuning: number[]): string {
 
 export default function FaceTabs() {
   const [query, setQuery] = useState('') // texte tapé dans le champ
-  const [instrument, setInstrument] = useState<Instrument>('guitar') // instrument choisi
+  const { settings } = useSettings()
+  const [instrument, setInstrument] = useState<Instrument>(settings.instrument) // instrument choisi
   const [songs, setSongs] = useState<Song[] | null>(null) // null = aucune recherche faite
   const [loading, setLoading] = useState(false) // recherche en cours ?
   const [error, setError] = useState<string | null>(null)

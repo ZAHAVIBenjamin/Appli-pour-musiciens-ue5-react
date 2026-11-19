@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSettings, type CubeMaterial } from '../../context/SettingsContext'
+import type { Instrument } from '../../services/tablatureApi'
 import {
   BAR_CHOICES,
   MAX_BPM,
@@ -60,6 +61,19 @@ export default function FaceSettings() {
         <option value="plastique">Plastique</option>
         <option value="bois">Bois</option>
         <option value="metal">Métal</option>
+      </select>
+
+      <h3>Tablatures</h3>
+      <p>Instrument par défaut</p>
+      <select
+        value={settings.instrument}
+        onChange={(event) =>
+          dispatch({ type: 'setInstrument', instrument: event.target.value as Instrument })
+        }
+      >
+        <option value="guitar">Guitare</option>
+        <option value="bass">Basse</option>
+        <option value="ukulele">Ukulélé</option>
       </select>
     </div>
   )
