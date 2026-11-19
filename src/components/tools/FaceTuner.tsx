@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { startMicrophone, stopMicrophone, detectPitch } from '../../services/audioEngine'
-import { frequencyToNote, type Note } from '../../utils/notes'
+import { frequencyToNote, midiToFullName, TUNINGS, type Note } from '../../utils/notes'
+import { useSettings } from '../../context/SettingsContext'
 
 // Accordeur : écoute le micro, affiche la note jouée, l'écart en cents et une aiguille.
 
@@ -18,6 +19,11 @@ export default function FaceTuner() {
   const [listening, setListening] = useState(false) // micro allumé ?
   const [note, setNote] = useState<Note | null>(null) // dernière note détectée
   const [error, setError] = useState<string | null>(null) // message si le micro est refusé
+
+  // Rappel des cordes à vide de l'instrument choisi dans les Réglages (Context, EI-02)
+  const { settings } = useSettings()
+  const strings = TUNINGS[settings.instrument].map(midiToFullName) // ex. ['Mi2', 'La2', ...]
+  const playedNote = note === null ? null : note.name + note.octave // donnée dérivée : la note jouée
 
   // Tant que listening vaut true : on allume le micro et on lit la note en boucle.
   // La fonction renvoyée (cleanup) coupe tout : au clic sur « Arrêter », ou quand
@@ -70,6 +76,17 @@ export default function FaceTuner() {
   return (
     <div className="tuner">
       <h2>Accordeur</h2>
+      {/* Les cordes à jouer à vide ; celle qui correspond à la note détectée est surlignée */}
+      <p className="tuner-strings">
+        {strings.map((name, index) => (
+          <span
+            key={index}
+            className={name === playedNote ? 'tuner-string active' : 'tuner-string'}
+          >
+            {name}
+          </span>
+        ))}
+      </p>
       <button onClick={toggle}>{listening ? 'Arrêter' : 'Démarrer'}</button>
 
       {error && <p className="tuner-error">{error}</p>}
