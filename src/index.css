@@ -1,5 +1,181 @@
-html, body, #root, .app {
+html,
+body,
+#root,
+.app {
   margin: 0;
   height: 100%;
   background: #111;
+}
+
+/* La barre de boutons flotte par-dessus la scène 3D, en haut de l'écran */
+.app {
+  position: relative;
+}
+
+.face-nav {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Les liens de la barre ont l'allure de boutons ; NavLink ajoute « active » à la face affichée */
+.face-nav a {
+  padding: 2px 8px;
+  border: 1px solid #888;
+  border-radius: 3px;
+  background: #fff;
+  color: #111;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.face-nav a.active {
+  background: #555;
+  color: #aaa;
+}
+
+/* Le panneau de l'outil actif : un carré collé sur la face du cube (420 px = FACE_PIXELS dans Cube.tsx).
+   Si l'outil est plus long que la face, on fait défiler à l'intérieur. */
+.tool-panel {
+  box-sizing: border-box;
+  width: 420px;
+  height: 420px;
+  padding: 12px;
+  overflow-y: auto;
+  text-align: center;
+  color: #fff;
+  background: rgba(17, 17, 17, 0.85);
+  border-radius: 6px;
+}
+
+.tool-panel h2 {
+  margin-top: 0;
+}
+
+/* Accordeur : nom de la note en grand, jauge avec un repère central et une aiguille */
+.tuner-note {
+  font-size: 64px;
+  margin: 8px 0;
+}
+
+.tuner-gauge {
+  position: relative; /* l'aiguille se place par rapport à la jauge */
+  width: 300px;
+  height: 40px;
+  margin: 0 auto;
+  border-bottom: 2px solid #555;
+}
+
+/* Repère central (0 cent) */
+.tuner-gauge::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #555;
+}
+
+.tuner-needle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  margin-left: -2px; /* centre l'aiguille sur sa position */
+  background: #e33;
+  transition: left 0.1s; /* glisse au lieu de sauter */
+}
+
+.tuner-needle.in-tune {
+  background: #3c3;
+}
+
+.tuner-error {
+  color: #f66;
+}
+
+/* Tablatures : liste de résultats sur fond sombre, qui défile si elle est trop longue */
+.tabs-results {
+  list-style: none;
+  padding: 0 16px;
+  margin: 16px auto;
+  max-width: 600px;
+  max-height: 60vh;
+  overflow-y: auto;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.tabs-results li {
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+}
+
+.tabs-results a {
+  color: #8cf;
+  font-weight: bold;
+}
+
+.tabs-track {
+  margin: 4px 0 0 16px;
+  font-size: 14px;
+  color: #bbb;
+}
+
+.tabs-error {
+  color: #f66;
+}
+
+/* Dictionnaire d'accords : boutons sur plusieurs lignes, diagramme à une largeur fixe */
+.chord-list {
+  display: flex;
+  flex-wrap: wrap; /* les boutons passent à la ligne s'il n'y a plus de place */
+  justify-content: center;
+  gap: 4px;
+  max-width: 420px;
+  margin: 0 auto 12px;
+}
+
+.chord-diagram {
+  width: 300px;
+  color: #fff; /* currentColor dans le SVG = cette couleur */
+}
+
+/* Page 404 : le lien vers l'accordeur reste lisible sur le fond sombre */
+.tool-panel a {
+  color: #8cf;
+}
+
+/* Sur la face du cube, c'est le panneau qui défile : pas de seconde barre dans la liste des tablatures */
+.tool-panel .tabs-results {
+  max-height: none;
+  overflow-y: visible;
+}
+
+/* Accordeur : rappel des cordes à vide, la corde jouée est surlignée */
+.tuner-strings {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tuner-string {
+  padding: 2px 6px;
+  border: 1px solid #555;
+  border-radius: 3px;
+}
+
+.tuner-string.active {
+  background: #3c3;
+  color: #111;
+}
+
+/* Sur mobile, glisser le doigt sur la scène fait tourner le cube au lieu de faire défiler la page */
+.app canvas {
+  touch-action: none;
 }
