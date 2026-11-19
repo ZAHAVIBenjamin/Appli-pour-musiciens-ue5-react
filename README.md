@@ -45,6 +45,17 @@ E = Benjamin · I = Bilal · E + I = en binôme
 | Réglages | I |
 | Déploiement Vercel | E + I |
 
+## Mise en ligne (Vercel)
+
+Le projet Vercel est relié au dépôt GitHub :
+
+- **`main`** = la version officielle (production), mise en ligne à chaque merge dans `main` ;
+- **toute autre branche** (`dev`, `feature/...`) = une **Preview** : une mise en ligne de test, avec sa
+  propre adresse, créée à chaque `push`. On vérifie une Preview avant de merger dans `main`.
+
+`vercel.json` contient deux règles qui ne se vérifient qu'en ligne : le proxy Songsterr (fiche E-05)
+et le renvoi de toutes les adresses vers `index.html` (fiche EI-01).
+
 ## Choix techniques et cours
 
 Le projet s'appuie sur le cours React : chapitres 1 à 7 (composants et props, routing, state, effets,
