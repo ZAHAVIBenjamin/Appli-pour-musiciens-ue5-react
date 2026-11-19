@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useFrame, type ThreeEvent } from '@react-three/fiber'
 import { Html, Text } from '@react-three/drei'
 import { useContextBridge } from 'its-fine'
@@ -49,6 +49,22 @@ const SIDE_TO_FACE: FaceId[] = ['tabs', 'chords', 'notebook', 'settings', 'tuner
 const FACE_PIXELS = 420
 const HTML_SCALE = (HALF * 2 - 0.2) / FACE_PIXELS / 0.025 // 0.025 : échelle de base de drei Html (transform)
 
+// Glisser le cube : pour chaque face, la face qui vient devant selon le sens du glissement.
+// Glisser vers la gauche amène la face de droite, vers le bas amène celle du dessus, etc.
+type Swipe = 'left' | 'right' | 'up' | 'down'
+const SWIPES: Record<FaceId, Record<Swipe, FaceId>> = {
+  tuner: { left: 'tabs', right: 'chords', down: 'notebook', up: 'settings' },
+  tabs: { left: 'metronome', right: 'tuner', down: 'notebook', up: 'settings' },
+  metronome: { left: 'chords', right: 'tabs', down: 'notebook', up: 'settings' },
+  chords: { left: 'tuner', right: 'metronome', down: 'notebook', up: 'settings' },
+  notebook: { left: 'tabs', right: 'chords', down: 'metronome', up: 'tuner' },
+  settings: { left: 'tabs', right: 'chords', down: 'tuner', up: 'metronome' },
+}
+const SWIPE_MIN_PX = 50 // en dessous, ce n'est pas un glissement (simple clic)
+
+// On ne glisse pas quand on manipule un contrôle de l'outil (curseur, champ, bouton, liste)
+const CONTROLS = 'input, select, textarea, button, a, .tabs-results'
+
 const ROTATION_SPEED = 6 // plus c'est grand, plus le cube rejoint vite sa cible
 
 // Étape 3 : parmi les angles équivalents (un tour complet = 2π = le même angle), prend celui le plus
@@ -90,6 +106,9 @@ export default function Cube() {
   // comme pour un clic dans la barre de navigation (une seule source de vérité : l'adresse)
   const navigate = useNavigate()
   function handleClick(event: ThreeEvent<MouseEvent>) {
+    if (event.delta > 5) {
+      return // la souris a bougé : c'était un glissement, pas un clic
+    }
     const side = event.face?.materialIndex
     if (side === undefined) {
       return
@@ -99,6 +118,43 @@ export default function Cube() {
       navigate(face.path)
     }
   }
+
+  // Glisser le cube (souris ou doigt) : on écoute la fenêtre, système extérieur à React → useEffect
+  // (chapitre 5), avec un cleanup qui retire les écouteurs. Comme le clic, le glissement ne fait
+  // que changer l'ADRESSE ; le cube tourne ensuite tout seul.
+  useEffect(() => {
+    let start: { x: number; y: number } | null = null
+
+    function handlePointerDown(event: PointerEvent) {
+      const target = event.target as Element
+      start = target.closest(CONTROLS) ? null : { x: event.clientX, y: event.clientY }
+    }
+
+    function handlePointerUp(event: PointerEvent) {
+      if (start === null) {
+        return
+      }
+      const dx = event.clientX - start.x
+      const dy = event.clientY - start.y
+      start = null
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < SWIPE_MIN_PX) {
+        return
+      }
+      const swipe: Swipe =
+        Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : dy < 0 ? 'up' : 'down'
+      const next = FACES.find((face) => face.id === SWIPES[shownFace][swipe])
+      if (next) {
+        navigate(next.path)
+      }
+    }
+
+    window.addEventListener('pointerdown', handlePointerDown)
+    window.addEventListener('pointerup', handlePointerUp)
+    return () => {
+      window.removeEventListener('pointerdown', handlePointerDown)
+      window.removeEventListener('pointerup', handlePointerUp)
+    }
+  }, [shownFace, navigate])
 
   return (
     <group ref={groupRef}>

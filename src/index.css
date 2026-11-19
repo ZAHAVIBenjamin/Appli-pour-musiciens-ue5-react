@@ -174,3 +174,8 @@ body,
   background: #3c3;
   color: #111;
 }
+
+/* Sur mobile, glisser le doigt sur la scène fait tourner le cube au lieu de faire défiler la page */
+.app canvas {
+  touch-action: none;
+}
