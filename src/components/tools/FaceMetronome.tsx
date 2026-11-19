@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react'
 import { getAudioContext, playClick } from '../../services/audioEngine'
+import {
+  BAR_CHOICES,
+  MAX_BPM,
+  MIN_BPM,
+  loadDefaultBeatsPerBar,
+  loadDefaultBpm,
+} from '../../utils/metronomeSettings'
 
 // Métronome : BPM et signature rythmique
 
-// Limites du curseur de tempo
-const MIN_BPM = 40
-const MAX_BPM = 220
-
 const CHECK_EVERY_MS = 25
 const SCHEDULE_AHEAD_S = 0.1
-const BAR_CHOICES = [2, 3, 4]
 
 export default function FaceMetronome() {
   // true quand le métronome tourne
   const [isPlaying, setIsPlaying] = useState(false)
   // tempo choisi par l'utilisateur, en battements par minute
-  const [bpm, setBpm] = useState(120)
-  const [beatsPerBar, setBeatsPerBar] = useState(4)
+  const [bpm, setBpm] = useState(loadDefaultBpm)
+  const [beatsPerBar, setBeatsPerBar] = useState(loadDefaultBeatsPerBar)
 
   // Tant que le métronome tourne, on joue un clic à chaque battement.
   // Relancé aussi quand le tempo change, pour prendre la nouvelle vitesse.
