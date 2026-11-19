@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSettings, type CubeMaterial } from '../../context/SettingsContext'
 import {
   BAR_CHOICES,
   MAX_BPM,
@@ -13,6 +14,7 @@ import {
 export default function FaceSettings() {
   const [defaultBpm, setDefaultBpm] = useState(loadDefaultBpm)
   const [defaultBeats, setDefaultBeats] = useState(loadDefaultBeatsPerBar)
+  const { settings, dispatch } = useSettings()
 
   useEffect(() => {
     saveDefaultBpm(defaultBpm)
@@ -45,6 +47,19 @@ export default function FaceSettings() {
             {beats}/4
           </option>
         ))}
+      </select>
+
+      <h3>Cube</h3>
+      <p>Matière : {settings.cubeMaterial}</p>
+      <select
+        value={settings.cubeMaterial}
+        onChange={(event) =>
+          dispatch({ type: 'setCubeMaterial', material: event.target.value as CubeMaterial })
+        }
+      >
+        <option value="plastique">Plastique</option>
+        <option value="bois">Bois</option>
+        <option value="metal">Métal</option>
       </select>
     </div>
   )
