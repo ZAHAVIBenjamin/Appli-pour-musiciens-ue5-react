@@ -11,7 +11,7 @@ export default function Layout() {
   return (
     <SettingsProvider>
       <div className="app">
-        <Canvas camera={{ position: [5, 4, 6], fov: 45 }}>
+        <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
           <Scene />
         </Canvas>
         <FaceNav />
