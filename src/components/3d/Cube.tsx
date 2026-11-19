@@ -1,13 +1,15 @@
 import { useRef } from 'react'
 import { useFrame, type ThreeEvent } from '@react-three/fiber'
-import { Text } from '@react-three/drei'
+import { Html, Text } from '@react-three/drei'
+import { useContextBridge } from 'its-fine'
 import { MathUtils, type Group } from 'three'
 import { useLocation, useNavigate } from 'react-router'
 import { useSettings, type CubeMaterial } from '../../context/SettingsContext'
 import { FACES, type FaceId } from '../../data/faces'
+import ToolPanel from '../ui/ToolPanel'
 
-// Modèle 3D du cube. Chaque face accueillera un outil de /components/tools
-// TODO : projeter l'UI sur les faces (drei <Html transform> ou textures Canvas)
+// Modèle 3D du cube : l'outil de la face active est collé sur sa face (EI-07),
+// les autres faces affichent leur nom.
 
 type Vector3 = [number, number, number]
 
@@ -20,7 +22,8 @@ const MATERIALS: Record<CubeMaterial, { color: string; metalness: number; roughn
 const HALF = 1.5
 const GAP = 0.01
 
-const LABEL_PLACEMENTS: Record<FaceId, { position: Vector3; rotation: Vector3 }> = {
+// Position et orientation de chaque face (pour son nom, ou pour l'outil quand elle est active)
+const FACE_PLACEMENTS: Record<FaceId, { position: Vector3; rotation: Vector3 }> = {
   tuner: { position: [0, 0, HALF + GAP], rotation: [0, 0, 0] },
   tabs: { position: [HALF + GAP, 0, 0], rotation: [0, Math.PI / 2, 0] },
   metronome: { position: [0, 0, -(HALF + GAP)], rotation: [0, Math.PI, 0] },
@@ -42,6 +45,10 @@ const FACE_ROTATIONS: Record<FaceId, [number, number]> = {
 // dans cet ordre : +x (droite), -x (gauche), +y (dessus), -y (dessous), +z (devant), -z (arrière)
 const SIDE_TO_FACE: FaceId[] = ['tabs', 'chords', 'notebook', 'settings', 'tuner', 'metronome']
 
+// Taille de l'outil collé sur une face : FACE_PIXELS pixels de HTML pour une face de HALF * 2 unités
+const FACE_PIXELS = 420
+const HTML_SCALE = (HALF * 2 - 0.2) / FACE_PIXELS / 0.025 // 0.025 : échelle de base de drei Html (transform)
+
 const ROTATION_SPEED = 6 // plus c'est grand, plus le cube rejoint vite sa cible
 
 // Étape 3 : parmi les angles équivalents (un tour complet = 2π = le même angle), prend celui le plus
@@ -57,7 +64,12 @@ export default function Cube() {
 
   const location = useLocation()
   const activeFace = FACES.find((face) => face.path === location.pathname)
-  const [rotationX, rotationY] = FACE_ROTATIONS[activeFace?.id ?? 'tuner']
+  const shownFace: FaceId = activeFace?.id ?? 'tuner' // adresse inconnue (404) : la face de l'accordeur
+  const [rotationX, rotationY] = FACE_ROTATIONS[shownFace]
+
+  // L'outil collé sur la face est rendu par drei <Html> dans une racine React SÉPARÉE : il ne voit
+  // plus le routeur ni les réglages. Le « pont » (its-fine) lui retransmet tous les contexts du dessus.
+  const ContextBridge = useContextBridge()
 
   // Étape 3 : l'animation. La rotation du groupe n'est plus donnée par React (pas de prop rotation) :
   // à chaque image, on la rapproche un peu de la cible, directement sur l'objet 3D (via la ref).
@@ -102,19 +114,41 @@ export default function Cube() {
           roughness={material.roughness}
         />
       </mesh>
-      {FACES.map((face) => (
-        <Text
-          key={face.id}
-          position={LABEL_PLACEMENTS[face.id].position}
-          rotation={LABEL_PLACEMENTS[face.id].rotation}
-          fontSize={0.4}
-          color="#ffffff"
-          outlineWidth={0.02}
-          outlineColor="#000000"
-        >
-          {face.label}
-        </Text>
-      ))}
+      {FACES.map((face) => {
+        const placement = FACE_PLACEMENTS[face.id]
+        // Face active : l'outil (le ToolPanel et son <Outlet />), en vrai HTML cliquable collé sur la face
+        if (face.id === shownFace) {
+          return (
+            <Html
+              key={face.id}
+              transform
+              occlude
+              position={placement.position}
+              rotation={placement.rotation}
+              scale={HTML_SCALE}
+            >
+              <ContextBridge>
+                <ToolPanel />
+              </ContextBridge>
+            </Html>
+          )
+        }
+        // Autres faces : leur nom
+        return (
+          <group key={face.id}>
+            <Text
+              position={placement.position}
+              rotation={placement.rotation}
+              fontSize={0.4}
+              color="#ffffff"
+              outlineWidth={0.02}
+              outlineColor="#000000"
+            >
+              {face.label}
+            </Text>
+          </group>
+        )
+      })}
     </group>
   )
 }

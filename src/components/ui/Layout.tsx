@@ -2,11 +2,11 @@ import { Canvas } from '@react-three/fiber'
 import { SettingsProvider } from '../../context/SettingsContext'
 import Scene from '../3d/Scene'
 import FaceNav from './FaceNav'
-import ToolPanel from './ToolPanel'
 
-// Structure commune à toutes les faces : la scène 3D, la barre de navigation et le panneau.
+// Structure commune à toutes les faces : la scène 3D et la barre de navigation.
 // Déclaré une seule fois comme « route layout » dans App : il n'est pas recréé quand on change
-// de face (le cube garde sa position), seul le contenu du panneau change.
+// de face (le cube garde sa position). L'outil (ToolPanel + <Outlet />) est collé sur la face
+// active du cube (Cube.tsx, EI-07).
 export default function Layout() {
   return (
     <SettingsProvider>
@@ -17,7 +17,6 @@ export default function Layout() {
           <Scene />
         </Canvas>
         <FaceNav />
-        <ToolPanel />
       </div>
     </SettingsProvider>
   )
